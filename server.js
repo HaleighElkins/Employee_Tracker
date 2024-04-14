@@ -549,5 +549,5 @@ const removeDepartment = async () => {
     } catch (error) {
         console.error(error);
     }
-};
+}; 
   };
