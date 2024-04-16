@@ -13,10 +13,10 @@ const {
   addRole,
   addEmployee,
   updateEmployee
-} = require('./assets/functions')
+} = require('./assets/functions');
 
 const userChoices = [
-  "Views all departments",
+  "View all departments",
   "View all roles",
   "View all employees",
   "View all employees under specified manager",
@@ -33,18 +33,18 @@ const userChoices = [
 
 const userPrompt = {
   type: "list",
-  message:'\nPlease choose from the follwing to access and edit the data.',
+  message:'\nPlease choose from the following to access and edit the data.',
   name: "userChoice",
-  chices: userChoices
+  choices: userChoices
 };
 
 const actionMap = {
   "View all departments": departments,
   "View all roles": roles,
-  "view all employees": employees,
-  "View all employess under specified manager": managerEmployees,
+  "View all employees": employees,
+  "View all employees under specified manager": managerEmployees,
   "View all employees in specified department": deptEmployees,
-  "View the salary total in a department": departmentSalaryTotal,
+  "View salary total in a department": departmentSalaryTotal,
   "Add a department": addDepartment,
   "Add a role": addRole,
   "Add an employee": addEmployee,
@@ -69,4 +69,3 @@ function init() {
 init();
 
 module.exports = { init };
-
