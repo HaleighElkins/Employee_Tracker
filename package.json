@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "chalk": "^4.0.0",
+        "cli-table": "^0.3.11",
         "console.table": "^0.10.0",
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
@@ -20,6 +21,7 @@
         "inquirer": "^8.2.4",
         "mysql2": "^3.9.4",
         "nodemon": "^2.0.4",
+        "pg": "^8.11.5",
         "validator": "^13.0.0"
     }
 }

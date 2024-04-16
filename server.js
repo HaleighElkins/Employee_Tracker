@@ -13,7 +13,7 @@ const {
   addRole,
   addEmployee,
   updateEmployee
-} = require('./')
+} = require('./assets/functions')
 
 const userChoices = [
   "Views all departments",
