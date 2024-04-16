@@ -57,7 +57,8 @@ const actionMap = {
 function init() {
   inquirer.prompt(userPrompt)
   .then((userInput) => {
-    const action = actionMap[userInput.userChoice];
+    const userInputLowerCase = userInput.userChoice; // Remove toLowerCase() conversion
+    const action = actionMap[userInputLowerCase];
     if (action) {
       action();
     } else {
@@ -65,6 +66,7 @@ function init() {
     }
   });
 }
+
 
 init();
 
