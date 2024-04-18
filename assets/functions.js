@@ -2,40 +2,106 @@ const inquirer = require("inquirer");
 const Table = require('cli-table');
 const { Pool } = require('pg');
 
-const pool = new Pool (
-  {
-    user: 'postgres',
-    password: '1452',
-    host: 'localhost',
-    database: 'employee_db'
-  },
-  console.log('You have entered the employee database.')
-);
+
+
+const pool = new Pool({
+  user: 'postgres',
+  host: 'localhost',
+  database: 'employee_db',
+  password: '1452',
+  port: 5432, 
+});
+
+// // Departments
+// async function departments() {
+//     try {
+//       const getSql = `SELECT department.department_name AS "Department", 
+//       id AS "Department ID" 
+//       FROM department 
+//       ORDER BY department.department_name`;
+  
+//       const result = await pool.query(getSql);
+  
+//       const table = new Table({
+//         head: ['Department', 'Department ID']
+//       });
+  
+//       console.log('');
+//       result.rows.forEach(row => {
+//         table.push([row['Department'], row['Department ID']]);
+//       });
+      
+//       console.log(table.toString());
+//     } catch (error) {
+//       console.error('Having this issue: ', error);
+//     }
+//   }
+
+
+
 
 // Departments
+// async function departments() {
+//   try {
+//     const getSql = `SELECT department.department_name AS "Department", 
+//     id AS "Department ID" 
+//     FROM department 
+//     ORDER BY department.department_name`;
+
+//     const result = await pool.query(getSql);
+
+//     const table = new Table({
+//       head: ['Department', 'Department ID']
+//     });
+
+//     console.log('');
+//     result.rows.forEach(row => {
+//       table.push([row['Department'], row['Department ID']]);
+//     });
+    
+//     console.log(table.toString());
+//   } catch (error) {
+//     console.error('Having this issue: ', error);
+//   }
+// }
+
 async function departments() {
-    try {
-      const getSql = `SELECT department.dept_name AS "Department", 
-      id AS "Department ID" 
-      FROM department 
-      ORDER BY department.dept_name`;
+  try {
+    const getSql = `SELECT department.department_name AS "Department", 
+    id AS "Department ID" 
+    FROM department 
+    ORDER BY department.department_name`;
   
-      const result = await pool.query(getSql);
-  
-      const table = new Table({
-        head: ['Department', 'Department ID']
-      });
-  
-      console.log('');
-      result.rows.forEach(row => {
-        table.push([row['Department'], row['Department ID']]);
-      });
-      
-      console.log(table.toString());
-    } catch (error) {
-      console.error('Having this issue: ', error);
-    }
+
+    const result = await pool.query(getSql);
+
+    const table = new Table({
+      head: ['Department', 'Department ID']
+    });
+
+    console.log('');
+    result.rows.forEach(row => {
+      table.push([row['Department'], row['Department ID']]);
+    });
+    
+    console.log(table.toString());
+  } catch (error) {
+    console.error('Having this issue: ', error);
   }
+}
+
+
+
+// Function to retrieve all departments
+async function getAllDepartments() {
+  try {
+    const result = await pool.query('SELECT id, department_name FROM department');
+    return result.rows;
+  } catch (error) {
+    console.error('Error retrieving departments', error);
+    throw error;
+  }
+}
   
 //   Delete departments
 async function deleteDepartment() {
@@ -62,11 +128,11 @@ async function roles() {
     try {
       const getSql = `SELECT role.title AS "Title", 
       role.id AS "Title ID", 
-      department.dept_name AS "Department", 
+      department.department_name AS "Department", 
       role.salary AS "Salary" 
       FROM role 
       LEFT JOIN department ON department.id = role.dept_id 
-      ORDER BY department.dept_name ASC, role.title ASC`;
+      ORDER BY department.department_name ASC, role.title ASC`;
   
       const result = await pool.query(getSql);
   
@@ -114,7 +180,7 @@ async function employees() {
       const getSql = `SELECT employee.id AS "Employee ID", 
       employee.first_name AS "First Name", 
       employee.last_name AS "Last Name", 
-      department.dept_name AS "Department", 
+      department.department_name AS "Department", 
       role.title AS "Title", 
       role.salary AS "Salary", 
       CONCAT(manager.first_name, ' ', manager.last_name) AS "Manager Name" 
@@ -122,7 +188,7 @@ async function employees() {
       LEFT JOIN role ON role.id = employee.role_id 
       LEFT JOIN department ON department.id = role.dept_id 
       LEFT JOIN employee manager ON manager.id = employee.manager_id 
-      ORDER BY department.dept_name ASC, employee.last_name ASC`;
+      ORDER BY department.department_name ASC, employee.last_name ASC`;
   
       const result = await pool.query(getSql);
   
@@ -143,12 +209,12 @@ async function employees() {
   }
   
 //   Delete employees
-async function employees() {
+async function deleteEmployees() {
     try {
       const getSql = `SELECT employee.id AS "Employee ID", 
       employee.first_name AS "First Name", 
       employee.last_name AS "Last Name", 
-      department.dept_name AS "Department", 
+      department.department_name AS "Department", 
       role.title AS "Title", 
       role.salary AS "Salary", 
       CONCAT(manager.first_name, ' ', manager.last_name) AS "Manager Name" 
@@ -156,7 +222,7 @@ async function employees() {
       LEFT JOIN role ON role.id = employee.role_id 
       LEFT JOIN department ON department.id = role.dept_id 
       LEFT JOIN employee manager ON manager.id = employee.manager_id 
-      ORDER BY department.dept_name ASC, employee.last_name ASC`;
+      ORDER BY department.department_name ASC, employee.last_name ASC`;
   
       const result = await pool.query(getSql);
   
@@ -205,7 +271,7 @@ async function managerEmployees() {
       const getEmplSql = `SELECT employee.id AS "Employee ID", 
         employee.first_name AS "First Name", 
         employee.last_name AS "Last Name", 
-        department.dept_name AS "Department", 
+        department.department_name AS "Department", 
         role.title AS "Title", 
         role.salary AS "Salary"
         FROM employee 
@@ -236,10 +302,10 @@ async function managerEmployees() {
 async function deptEmployees() {
     try {
       // Query to get all departments
-      const getDeptSql = `SELECT department.dept_name AS "Department", 
+      const getDeptSql = `SELECT department.department_name AS "Department", 
         id AS "Department ID" 
         FROM department 
-        ORDER BY department.dept_name`;
+        ORDER BY department.department_name`;
   
       const deptResult = await pool.query(getDeptSql);
       const allDept = deptResult.rows.map(row => row.Department);
@@ -261,7 +327,7 @@ async function deptEmployees() {
       const getEmplSql = `SELECT employee.id AS "Employee ID", 
         employee.first_name AS "First Name", 
         employee.last_name AS "Last Name", 
-        department.dept_name AS "Department", 
+        department.department_name AS "Department", 
         role.title AS "Title", 
         role.salary AS "Salary", 
         CONCAT(manager.first_name, ' ', manager.last_name) AS "Manager Name" 
@@ -269,7 +335,7 @@ async function deptEmployees() {
         LEFT JOIN role ON role.id = employee.role_id 
         LEFT JOIN department ON department.id = role.dept_id 
         LEFT JOIN employee manager ON manager.id = employee.manager_id 
-        ORDER BY department.dept_name ASC, employee.last_name ASC`;
+        ORDER BY department.department_name ASC, employee.last_name ASC`;
   
       const emplResult = await pool.query(getEmplSql);
   
@@ -294,10 +360,10 @@ async function deptEmployees() {
 async function departmentSalaryTotal() {
     try {
       // Query to get all departments
-      const getDeptSql = `SELECT department.dept_name AS "Department", 
+      const getDeptSql = `SELECT department.department_name AS "Department", 
         id AS "Department ID" 
         FROM department 
-        ORDER BY department.dept_name`;
+        ORDER BY department.department_name`;
   
       const deptResult = await pool.query(getDeptSql);
       const allDept = deptResult.rows.map(row => row.Department);
@@ -319,7 +385,7 @@ async function departmentSalaryTotal() {
       const getEmplSql = `SELECT employee.id AS "Employee ID", 
         employee.first_name AS "First Name", 
         employee.last_name AS "Last Name", 
-        department.dept_name AS "Department", 
+        department.department_name AS "Department", 
         role.title AS "Title", 
         role.salary AS "Salary", 
         CONCAT(manager.first_name, ' ', manager.last_name) AS "Manager Name" 
@@ -327,7 +393,7 @@ async function departmentSalaryTotal() {
         LEFT JOIN role ON role.id = employee.role_id 
         LEFT JOIN department ON department.id = role.dept_id 
         LEFT JOIN employee manager ON manager.id = employee.manager_id 
-        ORDER BY department.dept_name ASC, employee.last_name ASC`;
+        ORDER BY department.department_name ASC, employee.last_name ASC`;
   
       const emplResult = await pool.query(getEmplSql);
   
@@ -362,7 +428,7 @@ async function addDepartment() {
       const deptName = newDept.deptName;
   
       // Query to insert the new department into the database
-      const insertSql = `INSERT INTO department (dept_name) VALUES ($1)`;
+      const insertSql = `INSERT INTO department (department_name) VALUES ($1)`;
       await pool.query(insertSql, [deptName]);
   
       console.log('New department added successfully!');
@@ -375,9 +441,9 @@ async function addDepartment() {
 async function addRole() {
     try {
       // Query to get all departments
-      const getDeptSql = `SELECT department.dept_name AS "Department", department.id
+      const getDeptSql = `SELECT department.department_name AS "Department", department.id
         FROM department 
-        ORDER BY dept_name`;
+        ORDER BY department_name`;
   
       const result = await pool.query(getDeptSql);
       const allDept = result.rows.map(row => row.Department);
@@ -529,7 +595,7 @@ async function updateEmployee() {
       const getSql = `SELECT employee.id AS "ID", 
         employee.first_name AS "First", 
         employee.last_name AS "Last", 
-        department.dept_name AS "Department", 
+        department.department_name AS "Department", 
         role.title AS "Title", 
         role.salary AS "Salary", 
         CONCAT(manager.first_name, ' ', manager.last_name) AS "Manager" 
@@ -602,5 +668,32 @@ async function updateEmployee() {
     }
   }
   
-  module.exports = { updateEmployee };
+// -----------------------------------------------------
+// Debugging
+// Get Employees
+async function getEmployees() {
+  // Function implementation...
+}
+
+// Export all functions
+module.exports = { 
+  getAllDepartments,
+  departments: departments,
+  departments,
+  deleteDepartment,
+  roles,
+  deleteRole,
+  getEmployees,
+  deleteEmployees, 
+  managerEmployees,
+  deptEmployees,
+  departmentSalaryTotal,
+  addDepartment,
+  addRole,
+  addEmployee,
+  addManager,
+  updateEmployee
+};
+// -----------------------------------------------
+  // module.exports = { updateEmployee };
   
