@@ -481,110 +481,219 @@ async function addRole() {
     }
   }
   
-//   Add Employees
+// //   Add Employees
+// async function addEmployee() {
+//     try {
+//       // Query to get all roles
+//       const getRoleSql = `SELECT role.title AS "Title", role.id FROM role ORDER BY title`;
+//       const result = await pool.query(getRoleSql);
+//       const allTitles = result.rows.map(row => row.Title);
+  
+//       // Prompt user for the details of the new employee
+//       const addEmployeeQuestions = [
+//         {
+//           type: "input",
+//           message: "Please enter the first name of the new employee.",
+//           name: "firstName"
+//         },
+//         {
+//           type: "input",
+//           message: "Please enter the last name of the new employee.",
+//           name: "lastName"
+//         },
+//         {
+//           type: "list",
+//           message: "Please choose the employee's title.",
+//           name: "title",
+//           choices: allTitles
+//         },
+//         {
+//           type: "confirm",
+//           message: "Does this person have a manager?",
+//           name: "hasManager",
+//           default: true
+//         }
+//       ];
+  
+//       const newEmployee = await inquirer.prompt(addEmployeeQuestions);
+//       const chosenRole = result.rows.find(row => row.Title === newEmployee.title);
+  
+//       // If the employee has a manager, prompt for manager details
+//       if (newEmployee.hasManager) {
+//         const managerId = await promptForManagerId();
+//         await insertEmployeeWithManager(newEmployee, chosenRole, managerId);
+//       } else {
+//         // Insert the new employee without a manager
+//         const insertSql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, NULL)`;
+//         await pool.query(insertSql, [newEmployee.firstName, newEmployee.lastName, chosenRole.id]);
+//         console.log('New Employee added successfully!');
+//       }
+//     } catch (error) {
+//       console.error('Having this issue: ', error);
+//     }
+//   }
+  
+//   async function promptForManagerId() {
+//     // Additional prompt to get the manager ID
+//     const managerIdQuestion = [
+//       {
+//         type: "input",
+//         message: "Please enter the manager's ID:",
+//         name: "managerId"
+//       }
+//     ];
+//     const managerIdResponse = await inquirer.prompt(managerIdQuestion);
+//     return managerIdResponse.managerId;
+//   }
+  
+//   async function insertEmployeeWithManager(newEmployee, chosenRole, managerId) {
+//     // Insert the new employee with a manager
+//     const insertSql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)`;
+//     await pool.query(insertSql, [newEmployee.firstName, newEmployee.lastName, chosenRole.id, managerId]);
+//     console.log('New Employee added successfully!');
+//   }
+
+
 async function addEmployee() {
-    try {
+  try {
       // Query to get all roles
       const getRoleSql = `SELECT role.title AS "Title", role.id FROM role ORDER BY title`;
       const result = await pool.query(getRoleSql);
       const allTitles = result.rows.map(row => row.Title);
-  
+
       // Prompt user for the details of the new employee
       const addEmployeeQuestions = [
-        {
-          type: "input",
-          message: "Please enter the first name of the new employee.",
-          name: "firstName"
-        },
-        {
-          type: "input",
-          message: "Please enter the last name of the new employee.",
-          name: "lastName"
-        },
-        {
-          type: "list",
-          message: "Please choose the employee's title.",
-          name: "title",
-          choices: allTitles
-        },
-        {
-          type: "confirm",
-          message: "Does this person have a manager?",
-          name: "hasManager",
-          default: true
-        }
+          {
+              type: "input",
+              message: "Please enter the first name of the new employee.",
+              name: "firstName"
+          },
+          {
+              type: "input",
+              message: "Please enter the last name of the new employee.",
+              name: "lastName"
+          },
+          {
+              type: "list",
+              message: "Please choose the employee's title.",
+              name: "title",
+              choices: allTitles
+          },
+          {
+              type: "confirm",
+              message: "Does this person have a manager?",
+              name: "hasManager",
+              default: true
+          }
       ];
-  
+
       const newEmployee = await inquirer.prompt(addEmployeeQuestions);
       const chosenRole = result.rows.find(row => row.Title === newEmployee.title);
-  
+
       // If the employee has a manager, prompt for manager details
       if (newEmployee.hasManager) {
-        const managerId = await promptForManagerId();
-        await insertEmployeeWithManager(newEmployee, chosenRole, managerId);
+          const managerId = await promptForManagerId();
+          await insertEmployeeWithManager(newEmployee, chosenRole, managerId);
       } else {
-        // Insert the new employee without a manager
-        const insertSql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, NULL)`;
-        await pool.query(insertSql, [newEmployee.firstName, newEmployee.lastName, chosenRole.id]);
-        console.log('New Employee added successfully!');
+          // Insert the new employee without a manager
+          const insertSql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, NULL)`;
+          await pool.query(insertSql, [newEmployee.firstName, newEmployee.lastName, chosenRole.id]);
+          console.log('New Employee added successfully!');
       }
-    } catch (error) {
+  } catch (error) {
       console.error('Having this issue: ', error);
-    }
   }
-  
-  async function promptForManagerId() {
-    // Additional prompt to get the manager ID
-    const managerIdQuestion = [
+}
+
+async function promptForManagerId() {
+  // Additional prompt to get the manager ID
+  const managerIdQuestion = [
       {
-        type: "input",
-        message: "Please enter the manager's ID:",
-        name: "managerId"
+          type: "input",
+          message: "Please enter the manager's ID:",
+          name: "managerId"
       }
-    ];
-    const managerIdResponse = await inquirer.prompt(managerIdQuestion);
-    return managerIdResponse.managerId;
-  }
-  
-  async function insertEmployeeWithManager(newEmployee, chosenRole, managerId) {
-    // Insert the new employee with a manager
-    const insertSql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)`;
-    await pool.query(insertSql, [newEmployee.firstName, newEmployee.lastName, chosenRole.id, managerId]);
-    console.log('New Employee added successfully!');
-  }
+  ];
+  const managerIdResponse = await inquirer.prompt(managerIdQuestion);
+  return managerIdResponse.managerId;
+}
+
+async function insertEmployeeWithManager(newEmployee, chosenRole, managerId) {
+  // Insert the new employee with a manager
+  const insertSql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)`;
+  await pool.query(insertSql, [newEmployee.firstName, newEmployee.lastName, chosenRole.id, managerId]);
+  console.log('New Employee added successfully!');
+}
+
   
 //   Add Manager 
+// async function addManager(newEmployee, chosenRole) {
+//     try {
+//       // Query to get all employees
+//       const getEmployeesSql = `SELECT employee.last_name AS "Last", employee.first_name AS "First", employee.id AS "ID"
+//         FROM employee ORDER BY last_name`;
+  
+//       const result = await pool.query(getEmployeesSql);
+//       const allEmployees = result.rows.map(row => `${row.ID}: ${row.Last}, ${row.First}`);
+  
+//       // Prompt user to choose the manager for the new employee
+//       const addManagerQuestion = [
+//         {
+//           type: "list",
+//           message: "Who is this person's manager?",
+//           name: "managerId",
+//           choices: allEmployees
+//         }
+//       ];
+  
+//       const managerTrue = await inquirer.prompt(addManagerQuestion);
+//       const chosenManager = result.rows.find(row => row.ID.toString() === managerTrue.managerId.split(':')[0]);
+  
+//       // Insert the new employee with the chosen manager
+//       const insertSql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)`;
+//       await pool.query(insertSql, [newEmployee.firstName, newEmployee.lastName, chosenRole.id, chosenManager.ID]);
+  
+//       console.log('New Employee added successfully!');
+//     } catch (error) {
+//       console.error('Having this issue: ', error);
+//     }
+//   }
 async function addManager(newEmployee, chosenRole) {
-    try {
+  try {
+      if (!newEmployee || !newEmployee.firstName || !newEmployee.lastName) {
+          throw new Error('Invalid employee data');
+      }
+
       // Query to get all employees
       const getEmployeesSql = `SELECT employee.last_name AS "Last", employee.first_name AS "First", employee.id AS "ID"
-        FROM employee ORDER BY last_name`;
-  
+      FROM employee ORDER BY last_name`;
+
       const result = await pool.query(getEmployeesSql);
       const allEmployees = result.rows.map(row => `${row.ID}: ${row.Last}, ${row.First}`);
-  
+
       // Prompt user to choose the manager for the new employee
       const addManagerQuestion = [
-        {
-          type: "list",
-          message: "Who is this person's manager?",
-          name: "managerId",
-          choices: allEmployees
-        }
+          {
+              type: "list",
+              message: "Who is this person's manager?",
+              name: "managerId",
+              choices: allEmployees
+          }
       ];
-  
+
       const managerTrue = await inquirer.prompt(addManagerQuestion);
       const chosenManager = result.rows.find(row => row.ID.toString() === managerTrue.managerId.split(':')[0]);
-  
+
       // Insert the new employee with the chosen manager
       const insertSql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ($1, $2, $3, $4)`;
       await pool.query(insertSql, [newEmployee.firstName, newEmployee.lastName, chosenRole.id, chosenManager.ID]);
-  
+
       console.log('New Employee added successfully!');
-    } catch (error) {
+  } catch (error) {
       console.error('Having this issue: ', error);
-    }
   }
+}
+
 
 //   Updating
 
@@ -683,6 +792,7 @@ module.exports = {
   deleteDepartment,
   roles,
   deleteRole,
+  employees,
   getEmployees,
   deleteEmployees, 
   managerEmployees,

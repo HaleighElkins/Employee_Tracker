@@ -1,3 +1,99 @@
+// const inquirer = require('inquirer');
+// const {
+//   departments,
+//   deleteDepartment,
+//   roles,
+//   deleteRole,
+//   employees,
+//   deleteEmployee,
+//   managerEmployees,
+//   deptEmployees,
+//   departmentSalaryTotal,
+//   addDepartment,
+//   addRole,
+//   addEmployee,
+//   updateEmployee
+// } = require('./assets/functions');
+
+
+
+// const userPrompt = {
+//   type: "list",
+//   message:'\nPlease choose from the following to access and edit the data.',
+//   name: "userChoice",
+//   choices: [
+//     "View all departments",
+//     "View all roles",
+//     "View all employees",
+//     "View all employees under specified manager",
+//     "View all employees in specified department",
+//     "View salary total in a department",
+//     "Add a role",
+//     "Add a department",
+//     "Add an employee",
+//     "Update an employee role",
+//     "Delete a role",
+//     "Delete a department",
+//     "Delete an employee"
+//   ]
+// };
+
+// function init() {
+//   inquirer.prompt(userPrompt)
+//   .then((userInput) => {
+//     const userChoice = userInput.userChoice.trim(); // Trim the user input
+//     console.log("User choice:", userChoice);
+
+//     switch(userChoice) {
+//       case "View all departments":
+//         departments();
+//         break;
+//       case "View all roles":
+//         roles();
+//         break;
+//       case "View all employees":
+//         employees();
+//         break;
+//       case "View all employees under specified manager":
+//         managerEmployees();
+//         break;
+//       case "View all employees in specified department":
+//         deptEmployees();
+//         break;
+//       case "View salary total in a department":
+//         departmentSalaryTotal();
+//         break;
+//       case "Add a department":
+//         addDepartment();
+//         break;
+//       case "Add a role":
+//         addRole();
+//         break;
+//       case "Add an employee":
+//         addEmployee();
+//         break;
+//       case "Update an employee role":
+//         updateEmployee();
+//         break;
+//       case "Delete a role":
+//         deleteRole();
+//         break;
+//       case "Delete a department":
+//         deleteDepartment();
+//         break;
+//       case "Delete an employee":
+//         deleteEmployee();
+//         break;
+//       default:
+//         console.log("Invalid choice.");
+//     }
+//   });
+// }
+
+// init();
+
+// module.exports = { init };
+
 const inquirer = require('inquirer');
 const {
   departments,
@@ -12,14 +108,13 @@ const {
   addDepartment,
   addRole,
   addEmployee,
-  updateEmployee
+  updateEmployee,
+  addManager 
 } = require('./assets/functions');
-
-
 
 const userPrompt = {
   type: "list",
-  message:'\nPlease choose from the following to access and edit the data.',
+  message: '\nPlease choose from the following to access and edit the data.',
   name: "userChoice",
   choices: [
     "View all departments",
@@ -31,65 +126,76 @@ const userPrompt = {
     "Add a role",
     "Add a department",
     "Add an employee",
+    "Add a manager", 
     "Update an employee role",
     "Delete a role",
     "Delete a department",
-    "Delete an employee"
+    "Delete an employee",
+    "Exit"
   ]
 };
 
-function init() {
-  inquirer.prompt(userPrompt)
-  .then((userInput) => {
-    const userChoice = userInput.userChoice.trim(); // Trim the user input
+async function start() {
+  let exit = false;
+
+  while (!exit) {
+    const userInput = await inquirer.prompt(userPrompt);
+    const userChoice = userInput.userChoice.trim(); 
     console.log("User choice:", userChoice);
 
-    switch(userChoice) {
+    switch (userChoice) {
       case "View all departments":
-        departments();
+        await departments();
         break;
       case "View all roles":
-        roles();
+        await roles();
         break;
       case "View all employees":
-        employees();
+        await employees();
         break;
       case "View all employees under specified manager":
-        managerEmployees();
+        await managerEmployees();
         break;
       case "View all employees in specified department":
-        deptEmployees();
+        await deptEmployees();
         break;
       case "View salary total in a department":
-        departmentSalaryTotal();
+        await departmentSalaryTotal();
         break;
       case "Add a department":
-        addDepartment();
+        await addDepartment();
         break;
       case "Add a role":
-        addRole();
+        await addRole();
         break;
       case "Add an employee":
-        addEmployee();
+        await addEmployee();
+        break;
+        case "Add a manager":
+        await addManager({ firstName: 'John', lastName: 'Doe' }, { id: 1, title: 'Manager' });
         break;
       case "Update an employee role":
-        updateEmployee();
+        await updateEmployee();
         break;
       case "Delete a role":
-        deleteRole();
+        await deleteRole();
         break;
       case "Delete a department":
-        deleteDepartment();
+        await deleteDepartment();
         break;
       case "Delete an employee":
-        deleteEmployee();
+        await deleteEmployee();
+        break;
+      case "Exit":
+        exit = true;
+        console.log("Exiting...");
         break;
       default:
         console.log("Invalid choice.");
     }
-  });
+  }
 }
 
-init();
+start();
 
-module.exports = { init };
+module.exports = { start };
