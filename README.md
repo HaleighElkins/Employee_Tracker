@@ -18,8 +18,6 @@ Promises:
 https://stackoverflow.com/questions/63005429/passing-promises-with-mysql-nodejs
 
 
-
-
 Fastify and PostgreSQL: 
 
 https://wanjohi.vercel.app/2021/04/20/Fastify-and-PostgreSQL-REST-API/
