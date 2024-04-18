@@ -18,6 +18,8 @@ AS A business owner I WANT to be able to view and manage the dpeartments, roles,
 
 ![Screenshot 2024-04-18 141530](https://github.com/HaleighElkins/Employee_Tracker/assets/152942336/fa34ab5e-96d3-42dd-bd6e-de25481213e7)
 
+https://github.com/HaleighElkins/Employee_Tracker
+
 
 ## Credits
 
